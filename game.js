@@ -1,42 +1,54 @@
 var fs = require('fs'),
-	word = require('./word.js');
+	word = require('./word.js'),
+	inquirer = require('inquirer');
 
 
 var game = function() {
 
-	wordsGuessed : 0,
+	this.wordsGuessed = 0;
 
-	guessesRemaining : 0,
+	this.guessesRemaining = 0;
 
-	currentWrd : null,
+	this.currentWrd = null;
 
-	resetGuessesRemaining : function() {
+};
 
-		this.guessesRemaining = 0;
 
-	},
+game.prototype.resetGuessesRemaining = function() {
 
-	keepPromptingUser : function() {
+	this.guessesRemaining = 0;
 
-		do {
+};
 
-			inquirer.prompt([
 
-				{
-					type: 'input',
-					message: 'Please guess another letter: ',
-					name: 'letter'
-				}
+game.prototype.keepPromptingUser = function() {
 
-			]).then(function(letter) {
+	if(this.guessesRemaining > 0 && word.objectsFound != true) {
 
-				console.log(letter);
+		inquirer.prompt([
 
-				word.checkIfLetterFound(letter);
+			{
+				type: 'input',
+				message: 'Please guess another letter: ',
+				name: 'letter'
+			}
 
-			});
+		]).then(function(letter) {
 
-		} while (guessesRemaining < 1 && word.objectsFound != true);
+			console.log(letter);
+
+			word.checkIfLetterFound(letter);
+			word.wordRender();
+
+			this.guessesRemaining--;
+
+			this.keepPromptingUser();
+
+		});
+
+	} else {
+	
+		this.resetGuessesRemaining();
 
 	}
 
@@ -59,9 +71,13 @@ game.prototype.startgame = function() {
 	// size of random.txt
 	var max = fs.readFileSync('./words.txt').toString().split('\n').length;
 
-	return get_line('./words.txt', rand(0, max));
+	this.currentWrd = get_line('./words.txt', rand(0, max));
 
-}
+	this.guessesRemaining = this.currentWrd.length;
+
+	return this.currentWrd;
+
+};
 
 
 module.exports = {

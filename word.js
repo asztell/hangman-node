@@ -4,44 +4,60 @@ var fs = require('fs'),
 
 var word = function() {
 
-	letters : [],
+	this.letters = [];
 
-	objectsFound : false,
+	this.objectsFound = false;
 
-	getLets : function(new_word) {
-		for(var i = 0; i < new_word.length; i++) {
-			var show = checkIfLetterFound(new_word.charAt(i));
-			var new_Letter = new Letter(new_word.charAt(i), show);
-			letters.push(new_Letter);
-		}
-	},
+};
 
-	didWeFindTheWord : function() {
-		if() {
-			objectsFound = true;
-		}
-	},
 
-	checkIfLetterFound : function(letter) {
-		for(var i = 0; i < letters.length; i++) {
-			if(letters[i] == letter) {
-				return true;
-			}
-		}
-		return false;
-	},
+word.prototype.getLets = function(new_word) {
 
-	wordRender : function() {
-		var renderedWord = '';
-
-		for(var i = 0; i < letters.length; i++) {
-			renderedWord += ' '+letters[i];
-		}
-
-		console.log('The word so far is: '+renderedWord);
+	for(var i = 0; i < new_word.length; i++) {
+		var new_Letter = new letter.Letter(new_word.charAt(i));
+		this.letters.push(new_Letter);
 	}
 
 };
+
+
+word.prototype.didWeFindTheWord = function() {
+	// if() {
+	// 	objectsFound = true;
+	// }
+};
+
+
+word.prototype.checkIfLetterFound = function(letter) {
+
+	for(var i = 0; i < this.letters.length; i++) {
+		if(this.letters[i] == letter) {
+
+			this.letters[i].show = true;
+
+		}
+
+	}
+
+};
+
+
+word.prototype.wordRender = function() {
+
+	var renderedWord = '';
+
+	for(var i = 0; i < this.letters.length; i++) {
+
+		if(this.letters[i].show == true) {
+			renderedWord += ' '+this.letters[i];
+		} else {
+			renderedWord += ' '+'_';
+		}
+	}
+
+	console.log('The word so far is: '+renderedWord);
+};
+
 
 module.exports = {
 	word: word
