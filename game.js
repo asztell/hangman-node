@@ -125,7 +125,7 @@ game.prototype.startgame = function() {
 
 
 
-	this.guessesRemaining = (this.currentWrd.length/2 | 0)+2;
+	this.guessesRemaining = (this.currentWrd.length>>1)+2;
 	// console.log('this.guessesRemaining == '+this.guessesRemaining);
 
 	var new_word = new word.word();
