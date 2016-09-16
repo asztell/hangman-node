@@ -1,5 +1,3 @@
-var fs = require('fs');
-
 var Letter = function(l) {
 	this.l = l;
 	this.show = false;

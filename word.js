@@ -1,5 +1,4 @@
-var fs = require('fs'),
-	letter = require('./letter.js');
+var letter = require('./letter.js');
 
 
 var word = function() {
@@ -28,6 +27,7 @@ word.prototype.getLets = function(new_word) {
 word.prototype.didWeFindTheWord = function() {
 	if(this.counter < 1) {
 		objectsFound = true;
+		return true;
 	}
 };
 
