@@ -8,6 +8,8 @@ var word = function() {
 
 	this.objectsFound = false;
 
+	this.counter = undefined;
+
 };
 
 
@@ -18,26 +20,34 @@ word.prototype.getLets = function(new_word) {
 		this.letters.push(new_Letter);
 	}
 
+	this.counter = this.letters.length;
+
 };
 
 
 word.prototype.didWeFindTheWord = function() {
-	// if() {
-	// 	objectsFound = true;
-	// }
+	if(this.counter < 1) {
+		objectsFound = true;
+	}
 };
 
 
 word.prototype.checkIfLetterFound = function(letter) {
+	var found = false;
+
 
 	for(var i = 0; i < this.letters.length; i++) {
-		if(this.letters[i] == letter) {
+		if(this.letters[i].l == letter) {
 
 			this.letters[i].show = true;
-
+			found = true;
 		}
 
 	}
+
+	// console.log(this.letters);
+
+	return found;
 
 };
 
@@ -47,15 +57,17 @@ word.prototype.wordRender = function() {
 	var renderedWord = '';
 
 	for(var i = 0; i < this.letters.length; i++) {
-
+		// console.log(this.letters[i].show);
 		if(this.letters[i].show == true) {
-			renderedWord += ' '+this.letters[i];
+			renderedWord += ' '+this.letters[i].l;
 		} else {
 			renderedWord += ' '+'_';
 		}
 	}
 
-	console.log('The word so far is: '+renderedWord);
+	console.log('');
+	console.log(renderedWord);
+	console.log('');
 };
 
 

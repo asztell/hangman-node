@@ -8,11 +8,11 @@ var new_word = new word.word();
 
 new_game.startgame();
 
+// console.log(new_game.currentWrd);
 new_word.getLets(new_game.currentWrd);
 
-new_game.keepPromptingUser();
+new_word.wordRender();
 
-var	char_arr = [],
-	display_arr = [];
+new_game.keepPromptingUser(new_word);
 
 // console.log(new_game.currentWrd);

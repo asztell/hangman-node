@@ -7,7 +7,7 @@ var game = function() {
 
 	this.wordsGuessed = 0;
 
-	this.guessesRemaining = 0;
+	this.guessesRemaining = undefined;
 
 	this.currentWrd = null;
 
@@ -21,28 +21,35 @@ game.prototype.resetGuessesRemaining = function() {
 };
 
 
-game.prototype.keepPromptingUser = function() {
+game.prototype.keepPromptingUser = function(word) {
 
-	if(this.guessesRemaining > 0 && word.objectsFound != true) {
+	// console.log('inside prompt func - this.guessesRemaining == '+this.guessesRemaining);
+
+	var self = this;
+
+	if(this.guessesRemaining > 0 && word.objectsFound == false) {
 
 		inquirer.prompt([
 
 			{
 				type: 'input',
-				message: 'Please guess another letter: ',
+				message: 'Please enter your next guess: ',
 				name: 'letter'
 			}
 
-		]).then(function(letter) {
+		]).then(function(answer) {
 
-			console.log(letter);
+			// console.log(answer.letter);
 
-			word.checkIfLetterFound(letter);
+			var found = word.checkIfLetterFound(answer.letter);
 			word.wordRender();
 
-			this.guessesRemaining--;
+			if(!found) {
+				self.guessesRemaining -= 1;
+				// console.log('after decrement - this.guessesRemaining == ' + this.guessesRemaining);
+			}
 
-			this.keepPromptingUser();
+			self.keepPromptingUser(word);
 
 		});
 
@@ -71,9 +78,10 @@ game.prototype.startgame = function() {
 	// size of random.txt
 	var max = fs.readFileSync('./words.txt').toString().split('\n').length;
 
-	this.currentWrd = get_line('./words.txt', rand(0, max));
+	this.currentWrd = get_line('./words.txt', rand(0, max)).trim();
 
-	this.guessesRemaining = this.currentWrd.length;
+	this.guessesRemaining = Math.floor(this.currentWrd.length / 2);
+	// console.log('this.guessesRemaining == '+this.guessesRemaining);
 
 	return this.currentWrd;
 
