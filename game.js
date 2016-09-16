@@ -23,7 +23,7 @@ game.prototype.resetGuessesRemaining = function() {
 
 game.prototype.keepPromptingUser = function(word) {
 
-	console.log('guessesRemaining == '+this.guessesRemaining);
+	console.log('You have ' + this.guessesRemaining + ' guesses left');
 
 	var self = this;
 
@@ -41,53 +41,13 @@ game.prototype.keepPromptingUser = function(word) {
 
 			// console.log(answer.letter);
 
-			var found = word.checkIfLetterFound(answer.letter);
-			word.wordRender();
-			word.didWeFindTheWord();
+			if(!word.checkIfLetterFound(answer.letter)) {self.guessesRemaining -= 1;}
 
-			if(!found) {
-				self.guessesRemaining -= 1;
-				// console.log('after decrement - this.guessesRemaining == ' + this.guessesRemaining);
-			}
+			word.wordRender();
+
+			if(word.didWeFindTheWord()) {endPrompt();}
 
 			self.keepPromptingUser(word);
-
-		});
-
-	} else if(word.objectsFound == true && this.guessesRemaining > 0){
-	
-		this.resetGuessesRemaining();
-		console.log('after resetGuessesRemaining()');
-
-		console.log('You guessed the word!');
-
-		inquirer.prompt([
-
-			{
-				type: 'input',
-				message: 'Would you like to play again? (y/n) ',
-				name: 'continue'
-			}
-
-		]).then(function(answer) {
-
-			console.log(answer.continue);
-
-			if(answer.continue == 'y') {
-
-				var new_word = self.startgame();
-				new_word.getLets(self.currentWrd);
-				new_word.wordRender();
-				console.log(self.currentWrd);
-				self.guessesRemaining = Math.floor(self.currentWrd.length/2);
-				self.keepPromptingUser(new_word);
-
-			} else if (answer.continue == 'n') {
-
-				console.log('Thank you for playing this amazing game!');
-				return;
-
-			}
 
 		});
 
@@ -96,7 +56,18 @@ game.prototype.keepPromptingUser = function(word) {
 		this.resetGuessesRemaining();
 		console.log('after resetGuessesRemaining()');
 
-		console.log('Sorry try again with another word');
+		if(word.objectsFound && this.guessesRemaining > 0){
+			console.log('You guessed the word!');
+		} else {
+			console.log('Sorry try again with another word');
+		}
+
+		endPrompt();
+
+	} 
+
+
+	function endPrompt() {
 
 		inquirer.prompt([
 
@@ -115,20 +86,21 @@ game.prototype.keepPromptingUser = function(word) {
 				var new_word = self.startgame();
 				new_word.getLets(self.currentWrd);
 				new_word.wordRender();
-				console.log(self.currentWrd);
-				self.guessesRemaining = Math.floor(self.currentWrd.length/2);
+				// console.log(self.currentWrd);
+				self.guessesRemaining = (self.currentWrd.length/2 | 0)+2;
 				self.keepPromptingUser(new_word);
 
 			} else if (answer.continue == 'n') {
 
 				console.log('Thank you for playing this amazing game!');
 				return;
+
 			}
 
 		});
 
-
 	}
+
 
 };
 
@@ -153,7 +125,7 @@ game.prototype.startgame = function() {
 
 
 
-	this.guessesRemaining = Math.floor(this.currentWrd.length / 2);
+	this.guessesRemaining = (this.currentWrd.length/2 | 0)+2;
 	// console.log('this.guessesRemaining == '+this.guessesRemaining);
 
 	var new_word = new word.word();
